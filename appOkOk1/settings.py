@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-ovf=80znznugf@f^setuqqb^&x4z^3aj7phzw&boubp^sm5o9+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost','127.0.0.1','192.168.43.6','192.168.16.128']
+ALLOWED_HOSTS = ['localhost','127.0.0.1','192.168.43.6','192.168.88.39']
 
 
 APPEND_SLASH = False

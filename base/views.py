@@ -1,5 +1,7 @@
 from django.shortcuts import render
-from rest_framework import viewsets,filters
+from rest_framework import viewsets
+
+from rest_framework.filters import OrderingFilter
 
 from base.models import CustomUser, Notification, Paiement, Reservation, Trajet, Vehicule
 from base.serializers import NotificationSerializers, PaiementSerializers, ReservationSerializers, TrajetSerializers, UserSerializers, VehiculeSerializers
@@ -10,6 +12,8 @@ class ReservationViewSet(viewsets.ModelViewSet):
 class TrajetViewSet(viewsets.ModelViewSet):
     queryset=Trajet.objects.all()
     serializer_class=TrajetSerializers
+    filter_backends = [OrderingFilter]
+    ordering_fields = ['horaire']
     
 class VehiculeViewSet(viewsets.ModelViewSet):
     queryset=Vehicule.objects.all()
