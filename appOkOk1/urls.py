@@ -34,11 +34,14 @@ from django.contrib import admin
 from django.urls import path ,include
 from base.urls import router as base_router
 from rest_framework import routers
+
+from base.views import CreateUserView
 router=routers.DefaultRouter()
 router.registry.extend(base_router.registry)
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('',include('api.urls')),
-    path('api/',include(router.urls))
+    path('api/',include(router.urls)),
+    path('api/users/', CreateUserView.as_view())
 ]
 #sudo /opt/lampp/manager-linux-x64.run
