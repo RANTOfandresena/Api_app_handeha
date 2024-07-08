@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from django.contrib.auth import authenticate
 from base.models import CustomUser, Notification, Paiement, Reservation, Trajet, Vehicule
+from django_filters import rest_framework as filters
 
 from dj_rest_auth.serializers import LoginSerializer
 
@@ -64,4 +65,13 @@ class CustomLoginSerializer(LoginSerializer):
         attrs['user'] = user
         return attrs
 
-    
+
+
+
+class UserFilter(filters.FilterSet):
+    numero = filters.CharFilter(field_name="numero", lookup_expr='exact')
+
+    class Meta:
+        model = CustomUser
+        fields = ['numero']
+ 

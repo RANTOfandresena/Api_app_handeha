@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-ovf=80znznugf@f^setuqqb^&x4z^3aj7phzw&boubp^sm5o9+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost','127.0.0.1','192.168.43.6','192.168.88.39']
+ALLOWED_HOSTS = ['localhost','127.0.0.1','192.168.43.6','192.168.88.39','192.168.88.48']
 
 
 APPEND_SLASH = False
@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_filters',
     'rest_framework',
     'rest_framework.authtoken',
     'dj_rest_auth',
@@ -145,3 +146,6 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'base.CustomUser'
+REST_FRAMEWORK = {
+    'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend']
+}

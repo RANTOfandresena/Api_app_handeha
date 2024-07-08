@@ -61,7 +61,10 @@ class Vehicule(models.Model):
     positionActuelle = models.CharField(max_length=100,null=True)
     capacite = models.IntegerField()
     numeroVechicule = models.CharField(max_length=100,null=True)
+    idUser = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     photo = models.ImageField(upload_to='photos/', null=True, blank=True)
+    nb_colonne = models.IntegerField()
+    nb_rangee = models.IntegerField()
     def __str__(self):
         return f'Vehicule {self.idVehicule}'
     
