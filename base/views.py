@@ -21,6 +21,7 @@ from .serializers import UserSerializers
 class ReservationViewSet(viewsets.ModelViewSet):
     queryset=Reservation.objects.all()
     serializer_class=ReservationSerializers
+    filterset_fields=['idUser','idTrajet']
 
 class TrajetViewSet(viewsets.ModelViewSet):
     queryset=Trajet.objects.all()
@@ -33,7 +34,6 @@ class TrajetViewSet(viewsets.ModelViewSet):
             queryset = queryset.filter(idUser=user_id)
         return queryset
 
-    
 class VehiculeViewSet(viewsets.ModelViewSet):
     queryset=Vehicule.objects.all()
     serializer_class=VehiculeSerializers

@@ -1,12 +1,12 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-
+from django.contrib.postgres.fields import ArrayField
 
 '''
 Relations et Cardinalités
 
     Utilisateur et Notification:
-        Un utilisateur peut avoir plusieurs notifications (0..*), 
+        Un utilisateur peut recevoir plusieurs notifications (0..*), 
         mais une notification appartient à un seul utilisateur (1).
     Utilisateur et Réservation: 
         Un utilisateur peut avoir plusieurs réservations (0..*), 
@@ -20,6 +20,9 @@ Relations et Cardinalités
     Trajet et Véhicule: 
         Un trajet est associé à un seul véhicule (1), 
         et un véhicule peut être associé à plusieurs trajets (0..*).
+    Utilisateur et Véhicule: 
+        Un Véhicule est associé à un seul véhicule (1), 
+        et un Utilisateur peut être associé à plusieurs trajets (0..*).
 '''
 
 
@@ -72,7 +75,7 @@ class Reservation(models.Model):
     idReservation = models.AutoField(primary_key=True)
     idUser = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     idTrajet = models.ForeignKey(Trajet, on_delete=models.CASCADE)
-    siegeNumero = models.CharField(max_length=10)
+    siegeNumero = ArrayField(models.IntegerField(), blank=True, default=list)
     def __str__(self):
         return f'Reservation {self.idReservation} par {self.idUser}'
     

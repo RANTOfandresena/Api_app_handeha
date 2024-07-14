@@ -5,15 +5,7 @@ from django_filters import rest_framework as filters
 
 from dj_rest_auth.serializers import LoginSerializer
 
-class ReservationSerializers(serializers.ModelSerializer):
-    class Meta:
-        model=Reservation
-        fields="__all__"
 
-class TrajetSerializers(serializers.ModelSerializer):
-    class Meta:
-        model=Trajet
-        fields="__all__"
     
 class VehiculeSerializers(serializers.ModelSerializer):
     class Meta:
@@ -33,13 +25,25 @@ class NotificationSerializers(serializers.ModelSerializer):
 class UserSerializers(serializers.ModelSerializer):
     class Meta:
         model=CustomUser
-        fields=("id","last_login","username","first_name","last_name","email","numero","image","password","est_conducteur") 
+        fields=("id","last_login","username","first_name","last_name","email","numero","image","est_conducteur")
     def create(self, validated_data):
         password = validated_data.pop('password')
         user = CustomUser(**validated_data)
         user.set_password(password)
         user.save()
         return user
+
+class TrajetSerializers(serializers.ModelSerializer):
+    chauffer=UserSerializers(source="idUser", read_only=True)
+    class Meta:
+        model=Trajet
+        fields="__all__"
+class ReservationSerializers(serializers.ModelSerializer):
+    trajet = TrajetSerializers(source='idTrajet', read_only=True)
+    utlitisateurResever=UserSerializers(source="idUser", read_only=True)
+    class Meta:
+        model=Reservation
+        fields = "__all__"
 
 # class CustomLoginSerializer(LoginSerializer):
 #     username = serializers.CharField(required=True, allow_blank=False)
