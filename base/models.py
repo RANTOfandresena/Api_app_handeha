@@ -45,7 +45,7 @@ class Utilisateur(models.Model):
     
     def __str__(self):
         return f'{self.nom} {self.prenom}'
-
+# siegeReseversiegeReserver
 class Trajet(models.Model):
     idTrajet = models.AutoField(primary_key=True)
     lieuDepart = models.CharField(max_length=100)
@@ -53,10 +53,14 @@ class Trajet(models.Model):
     horaire = models.DateTimeField()
     prix=models.DecimalField(max_digits=10,decimal_places=2)
     idVehicule = models.ForeignKey('Vehicule', on_delete=models.CASCADE)
-    attribute = models.CharField(max_length=100, null=True, blank=True)
+    siegeReserver=ArrayField(models.IntegerField(),blank=True,default=list)
     idUser = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     def __str__(self):
         return f'Trajet de {self.lieuDepart} à {self.lieuArrive}'
+    def save(self,*args,**kwargs):
+        if not self.siegeReserver:
+            self.siegeReserver = [0] * self.idVehicule.capacite
+        super(Trajet,self).save(*args,**kwargs)
     
 class Vehicule(models.Model):
     idVehicule = models.AutoField(primary_key=True)
@@ -78,7 +82,19 @@ class Reservation(models.Model):
     siegeNumero = ArrayField(models.IntegerField(), blank=True, default=list)
     def __str__(self):
         return f'Reservation {self.idReservation} par {self.idUser}'
-    
+    def save(self, *args, **kwargs):
+        super(Reservation, self).save(*args, **kwargs)
+        trajet = self.idTrajet
+        for siege in self.siegeNumero:
+            if trajet.siegeReserver[siege - 1] == 0:  
+                trajet.siegeReserver[siege - 1] = self.idUser.id
+            else:
+                raise ValueError(f"Siège {siege} déjà réservé")
+        try:
+            trajet.save()
+        except Exception as e:
+            print(f"Erreur lors de la mise à jour du trajet : {e}")
+        
 class Paiement(models.Model):
     idPaiement = models.AutoField(primary_key=True)
     ref=models.CharField(max_length=10,null=True)

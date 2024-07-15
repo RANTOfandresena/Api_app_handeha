@@ -35,6 +35,7 @@ from django.urls import path ,include
 from base.urls import router as base_router
 from rest_framework import routers
 
+
 from base.views import CreateUserView
 router=routers.DefaultRouter()
 router.registry.extend(base_router.registry)
