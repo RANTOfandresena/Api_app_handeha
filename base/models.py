@@ -68,7 +68,6 @@ class Vehicule(models.Model):
     positionActuelle = models.CharField(max_length=100,null=True)
     capacite = models.IntegerField()
     numeroVechicule = models.CharField(max_length=100,null=True)
-    idUser = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     photo = models.ImageField(upload_to='photos/', null=True, blank=True)
     nb_colonne = models.IntegerField()
     nb_rangee = models.IntegerField()
@@ -100,7 +99,11 @@ class Paiement(models.Model):
     ref=models.CharField(max_length=10,null=True)
     preuve = models.ImageField(upload_to='preuve/', null=True, blank=True)
     idReservation = models.OneToOneField(Reservation, on_delete=models.CASCADE)
-    montant = models.DecimalField(max_digits=10, decimal_places=2)
+    montant = models.DecimalField(max_digits=10,decimal_places=0)
+    numero = models.CharField(max_length=100)
+    nom = models.CharField(max_length=100)
+    refapp = models.CharField(max_length=100, null=True, blank=True)
+    datePaiement=models.DateTimeField(auto_now_add=True)
     def __str__(self):
         return f'Paiement {self.idPaiement} pour la reservation {self.idReservation.idReservation}'
 

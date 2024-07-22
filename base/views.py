@@ -29,7 +29,7 @@ from rest_framework.filters import BaseFilterBackend
 class ReservationViewSet(viewsets.ModelViewSet):
     queryset=Reservation.objects.all()
     serializer_class=ReservationSerializers
-    filterset_fields=['idUser','idTrajet','horaire']
+    filterset_fields=['idUser','idTrajet']#'horaire'
 
 
 class TrajetViewSet(viewsets.ModelViewSet):
@@ -41,6 +41,9 @@ class TrajetViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         queryset = Trajet.objects.all()
         user_id = self.request.query_params.get('idUser', None)
+        print("gggggggggggggg")
+        print(user_id)
+        print("gggggggggggggg")
         if user_id is not None:
             queryset = queryset.filter(idUser=user_id)
         # Filtrer les trajets dont la date est expirée
@@ -80,7 +83,6 @@ class CreateUserView(APIView):
             return Response({'message': 'Utilisateur créé avec succès'})
         return Response(serializer.errors, status=400)
 def get_route(request):
-    
     client = openrouteservice.Client(key='5b3ce3597851110001cf6248f3b777ac2d094a13abbbec85a0752240')
 
     # Récupérer les coordonnées de départ et d'arrivée depuis les paramètres GET

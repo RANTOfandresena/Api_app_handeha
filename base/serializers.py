@@ -37,13 +37,14 @@ class TrajetSerializers(serializers.ModelSerializer):
     chauffer=UserSerializers(source="idUser", read_only=True)
     class Meta:
         model=Trajet
-        fields="__all__"
+        fields=('idTrajet', 'lieuDepart', 'lieuArrive', 'horaire', 'prix',
+                  'idVehicule','idUser', 'siegeReserver', 'chauffer')
 class ReservationSerializers(serializers.ModelSerializer):
     trajet = TrajetSerializers(source='idTrajet', read_only=True)
     utlitisateurResever=UserSerializers(source="idUser", read_only=True)
     class Meta:
         model=Reservation
-        fields = "__all__"
+        fields = ('idReservation', 'idUser', 'idTrajet', 'siegeNumero', 'trajet', 'utlitisateurResever')
 
 # class CustomLoginSerializer(LoginSerializer):
 #     username = serializers.CharField(required=True, allow_blank=False)
