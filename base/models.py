@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.contrib.postgres.fields import ArrayField
+from django.utils import timezone
 
 '''
 Relations et Cardinalités
@@ -71,6 +72,19 @@ class Vehicule(models.Model):
     photo = models.ImageField(upload_to='photos/', null=True, blank=True)
     nb_colonne = models.IntegerField()
     nb_rangee = models.IntegerField()
+    
+    def peut_etre_modifie_ou_supprime(self):
+        return not Trajet.objects.filter(idVehicule=self, horaire__gt=timezone.now()).exists()
+
+    def save(self, *args, **kwargs):
+        if self.pk is not None and not self.peut_etre_modifie_ou_supprime():
+            raise ValueError("Ce véhicule ne peut pas être modifié car il est lié à un trajet non expiré.")
+        super(Vehicule, self).save(*args, **kwargs)
+
+    def delete(self, *args, **kwargs):
+        if not self.peut_etre_modifie_ou_supprime():
+            raise ValueError("Ce véhicule ne peut pas être supprimé car il est lié à un trajet non expiré.")
+        super(Vehicule, self).delete(*args, **kwargs)
     def __str__(self):
         return f'Vehicule {self.idVehicule}'
     
