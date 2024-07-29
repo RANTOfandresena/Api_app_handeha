@@ -25,6 +25,8 @@ import datetime
 from django.db.models import Q
 from rest_framework.filters import BaseFilterBackend
 
+from rest_framework.decorators import action
+
 
 class ReservationViewSet(viewsets.ModelViewSet):
     queryset=Reservation.objects.all()
@@ -41,14 +43,35 @@ class TrajetViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         queryset = Trajet.objects.all()
         user_id = self.request.query_params.get('idUser', None)
-        print("gggggggggggggg")
-        print(user_id)
-        print("gggggggggggggg")
         if user_id is not None:
             queryset = queryset.filter(idUser=user_id)
         # Filtrer les trajets dont la date est expirée
         queryset = queryset.filter(horaire__gte=datetime.date.today())
         return queryset
+    def filter_historique(self):
+        # Récupérer tous les trajets passés
+        historique_queryset = Trajet.objects.filter(horaire__lt=datetime.date.today())
+        serializer = self.get_serializer(historique_queryset, many=True)
+        return Response(serializer.data)
+    @action(detail=False, methods=['get'])
+    def historique(self, request):
+        return self.filter_historique()
+    @action(detail=False, methods=['get'])
+    def filtreDonne(self,request):
+        queryset = Trajet.objects.all()
+        lieu_arrive = self.request.query_params.get('lieuArrive', None)
+        lieu_depart = self.request.query_params.get('lieuDepart', None)
+        horaire = self.request.query_params.get('horaire', None)
+
+        if lieu_arrive is not None:
+            queryset = queryset.filter(lieuArrive__contains=lieu_arrive)
+        if lieu_depart is not None:
+            queryset = queryset.filter(lieuDepart__contains=lieu_depart)
+        if horaire is not None:
+            queryset = queryset.filter(horaire__contains=horaire)
+        queryset = queryset.order_by('-horaire')
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
 
 class VehiculeViewSet(viewsets.ModelViewSet):
     queryset=Vehicule.objects.all()

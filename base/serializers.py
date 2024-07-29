@@ -42,10 +42,18 @@ class TrajetSerializers(serializers.ModelSerializer):
 class ReservationSerializers(serializers.ModelSerializer):
     trajet = TrajetSerializers(source='idTrajet', read_only=True)
     utlitisateurResever=UserSerializers(source="idUser", read_only=True)
+    paiement = PaiementSerializers(read_only=True)
     class Meta:
         model=Reservation
-        fields = ('idReservation', 'idUser', 'idTrajet', 'siegeNumero', 'trajet', 'utlitisateurResever')
-
+        fields = ('idReservation', 'idUser', 'idTrajet', 'siegeNumero', 'trajet', 'utlitisateurResever','paiement')
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        try:
+            paiement = Paiement.objects.get(idReservation=instance)
+            representation['paiement'] = PaiementSerializers(paiement).data
+        except Paiement.DoesNotExist:
+            representation['paiement'] = None
+        return representation
 # class CustomLoginSerializer(LoginSerializer):
 #     username = serializers.CharField(required=True, allow_blank=False)
 
