@@ -98,7 +98,7 @@ class Reservation(models.Model):
     def save(self, *args, **kwargs):
         super(Reservation, self).save(*args, **kwargs)
         trajet = self.idTrajet
-        for siege in self.siegeNumero:
+        for siege in self.siegeNumero:  
             if trajet.siegeReserver[siege - 1] == 0:  
                 trajet.siegeReserver[siege - 1] = self.idUser.id
             else:
