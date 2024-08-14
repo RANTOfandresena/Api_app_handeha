@@ -7,3 +7,4 @@ pgcli
 psycopg
 psycopg2-binary
 ptyprocess
+gunicorn
