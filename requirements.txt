@@ -1,0 +1,9 @@
+dj-rest-auth
+Django
+django-filter
+djangorestframework
+fuse-python
+pgcli
+psycopg
+psycopg2-binary
+ptyprocess
