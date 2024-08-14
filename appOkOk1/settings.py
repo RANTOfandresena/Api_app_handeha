@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/5.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
-
+import dj_database_url
 from pathlib import Path
 import os
 
@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-ovf=80znznugf@f^setuqqb^&x4z^3aj7phzw&boubp^sm5o9+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['localhost','127.0.0.1','192.168.43.6','192.168.88.48','192.168.16.141']
+ALLOWED_HOSTS = ['localhost','127.0.0.1','192.168.43.6','192.168.88.48','192.168.16.141','https://backappokok.onrender.com']
 
 
 APPEND_SLASH = False
@@ -81,15 +81,20 @@ WSGI_APPLICATION = 'appOkOk1.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
+#DATABASES = {
+#    'default': {
+#        'ENGINE': 'django.db.backends.postgresql',
+#        'NAME': 'appokok',
+#        'USER': 'postgres',
+#        'PASSWORD': 'a',
+#        'HOST': '127.0.0.1',
+#        'PORT': '5432',  
+#    }
+#}
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'appokok',
-        'USER': 'postgres',
-        'PASSWORD': 'a',
-        'HOST': '127.0.0.1',
-        'PORT': '5432',  
-    }
+    'default': dj_database_url.config(
+        default=os.getenv('DATABASE_URL')  # Render va fournir cette variable d'environnement automatiquement
+    )
 }
 
 # DATABASES = {
