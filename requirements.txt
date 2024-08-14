@@ -9,3 +9,4 @@ psycopg2-binary
 ptyprocess
 gunicorn
 openrouteservice
+dj-database-url
